@@ -1,0 +1,74 @@
+/* css/style.css */
+:root {
+  --red: #cc0000;
+  --dark: #1a1a1a;
+  --mid: #2c2c2c;
+  --light: #f5f5f5;
+  --text: #fff;
+  font-family: 'Roboto', sans-serif;
+}
+body {
+  margin: 0;
+  background-color: var(--dark);
+  color: var(--text);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  min-height: 100vh;
+  padding: 20px;
+}
+h1 {
+  margin-bottom: 25px;
+  text-align: center;
+  color: var(--red);
+}
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 15px;
+  width: 100%;
+  max-width: 900px;
+}
+button.job-btn {
+  background: var(--mid);
+  color: var(--text);
+  border: 2px solid var(--red);
+  padding: 18px;
+  font-size: 16px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+button.job-btn:hover {
+  background: var(--red);
+}
+
+/* Modal Styles */
+.modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); justify-content: center; align-items: center; padding: 20px; z-index: 999; }
+.modal.active { display: flex; }
+.modal-content { background: var(--mid); border: 2px solid var(--red); border-radius: 10px; max-width: 600px; width: 100%; padding: 20px; color: var(--text); }
+.modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+.modal-header h2 { margin: 0; color: var(--red); }
+.modal-body { max-height: 65vh; overflow-y: auto; padding-right: 10px; }
+label { display: block; margin: 8px 0; }
+input[type="checkbox"] { transform: scale(1.2); margin-right: 8px; }
+.modal-footer { margin-top: 15px; display: flex; flex-wrap: wrap; gap: 10px; justify-content: flex-end; }
+.modal-footer button { padding: 10px 16px; border: none; border-radius: 8px; cursor: pointer; font-weight: 500; }
+.save-btn { background: #333; color: #fff; }
+.clear-btn { background: #555; color: #fff; }
+.close-btn { background: #777; color: #fff; }
+.complete-btn { background: var(--red); color: #fff; opacity: 0.5; }
+.complete-btn.active { opacity: 1; }
+
+/* Summary modal */
+.summary { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9); justify-content: center; align-items: center; padding: 20px; z-index: 1000; }
+.summary.active { display: flex; }
+.summary-content { background: var(--mid); border: 2px solid var(--red); border-radius: 10px; padding: 20px; max-width: 700px; width: 100%; color: var(--text); }
+.summary-content h3 { margin-top: 0; color: var(--red); }
+.summary-content pre { background: #111; padding: 10px; border-radius: 8px; color: #ddd; white-space: pre-wrap; font-family: monospace; }
+.summary-buttons { margin-top: 10px; display: flex; gap: 10px; justify-content: flex-end; }
+.print-btn, .copy-btn, .close-summary { padding: 10px 16px; border: none; border-radius: 8px; cursor: pointer; color: #fff; }
+.print-btn { background: #444; }
+.copy-btn { background: #555; }
+.close-summary { background: #666; }
