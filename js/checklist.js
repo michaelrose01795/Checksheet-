@@ -1,22 +1,119 @@
-// js/checklist.js
-let jobTypes = {};
-let safetyChecks = [];
-
-async function loadChecklists() {
-  try {
-    const res = await fetch('js/checklists.json');
-    if (!res.ok) throw new Error('Failed to load checklists.json');
-    const data = await res.json();
-    safetyChecks = data.safetyChecks || [];
-    jobTypes = data.jobTypes || {};
-    renderButtons();
-  } catch (err) {
-    console.error('Error loading checklists:', err);
-    document.getElementById('jobGrid').innerHTML = `<p style="color:red;">Failed to load checklists.json</p>`;
+// file: js/checklist.js
+// ------------------------------
+// EMBEDDED CHECKLIST DATA
+// ------------------------------
+const checklists = {
+  safetyChecks: [
+    "Torque all road wheels",
+    "Confirm all safety-critical bolts are tightened",
+    "LWNK in car",
+    "Visual check for leaks, damage, or interference",
+    "Final road test vehicle"
+  ],
+  jobTypes: {
+    "Brake Pads": [
+      "Secure vehicle on ramps/jacks",
+      "Check wheel nuts for torque",
+      "Remove road wheels",
+      "Inspect pads for wear",
+      "Check pad sensor connections",
+      "Clean caliper sliding pins",
+      "Install new pads",
+      "Torque caliper bolts to spec",
+      "Check brake fluid level",
+      "Refit wheels and torque nuts"
+    ],
+    "Brake Pads & Discs": [
+      "Secure vehicle on ramps/jacks",
+      "Remove wheels",
+      "Inspect discs for run-out and wear",
+      "Install new discs and pads",
+      "Torque caliper bolts to spec",
+      "Check brake fluid level",
+      "Refit wheels"
+    ],
+    "Track Rod Ends": [
+      "Secure vehicle on ramps/jacks",
+      "Check steering play",
+      "Remove road wheel",
+      "Remove split pin/cotter pin",
+      "Loosen lock nut",
+      "Remove track rod end",
+      "Install new track rod end to same length",
+      "Torque lock nut and ball joint nut to spec",
+      "Set steering straight and test drive"
+    ],
+    "Shock Absorbers / Springs": [
+      "Secure vehicle and support suspension arm",
+      "Remove wheel",
+      "Check for leaks or damage",
+      "Remove lower and upper shock bolts",
+      "Compress spring (if applicable) safely",
+      "Install new unit and torque all bolts",
+      "Refit wheel"
+    ],
+    "Exhaust": [
+      "Raise vehicle securely",
+      "Inspect old exhaust and mounting points",
+      "Remove old system",
+      "Check exhaust hangers and gaskets",
+      "Fit new exhaust system",
+      "Tighten all clamps and joints",
+      "Check for leaks after start-up"
+    ],
+    "Wheel Bearing": [
+      "Raise vehicle securely",
+      "Check play in wheel bearing",
+      "Remove road wheel and brake components",
+      "Remove hub assembly",
+      "Press out old bearing, clean hub",
+      "Press in new bearing",
+      "Reassemble and torque to spec"
+    ],
+    "Service": [
+      "Secure vehicle",
+      "Check oil level",
+      "Drain old engine oil",
+      "Replace sump washer and tighten",
+      "Install new oil filter",
+      "Replace air/fuel/cabin filters",
+      "Top up fluids",
+      "Check belts and hoses",
+      "Inspect tyres and pressures",
+      "Reset service indicators"
+    ],
+    "Tyres": [
+      "Inspect tyre tread depth and condition",
+      "Check for damage and age cracks",
+      "Set correct tyre pressures",
+      "Torque wheel nuts"
+    ],
+    "Other Job": []
   }
-}
+};
+
+// ------------------------------
+// INITIALIZE VARIABLES
+// ------------------------------
+let jobTypes = checklists.jobTypes;
+let safetyChecks = checklists.safetyChecks;
 
 const grid = document.getElementById('jobGrid');
+const modal = document.getElementById('checkModal');
+const modalTitle = document.getElementById('modalTitle');
+const modalBody = document.getElementById('modalBody');
+const saveBtn = document.querySelector('.save-btn');
+const clearBtn = document.querySelector('.clear-btn');
+const closeBtn = document.querySelector('.close-btn');
+const completeBtn = document.querySelector('.complete-btn');
+const summaryModal = document.getElementById('summaryModal');
+const summaryText = document.getElementById('summaryText');
+
+let currentJob = null;
+
+// ------------------------------
+// RENDER JOB BUTTONS
+// ------------------------------
 function renderButtons() {
   grid.innerHTML = "";
   Object.keys(jobTypes).forEach(job => {
@@ -28,11 +125,9 @@ function renderButtons() {
   });
 }
 
-const modal = document.getElementById('checkModal');
-const modalTitle = document.getElementById('modalTitle');
-const modalBody = document.getElementById('modalBody');
-let currentJob = null;
-
+// ------------------------------
+// OPEN CHECKLIST MODAL
+// ------------------------------
 function openChecklist(job) {
   modal.classList.add('active');
   modalTitle.textContent = job;
@@ -64,20 +159,22 @@ function openChecklist(job) {
   updateCompleteButton();
 }
 
+// ------------------------------
+// ADD / DELETE CHECKPOINTS
+// ------------------------------
 function addCheckpoint() {
   jobTypes[currentJob].push("New checkpoint");
   openChecklist(currentJob);
 }
+
 function deleteCheckpoint(index) {
   jobTypes[currentJob].splice(index, 1);
   openChecklist(currentJob);
 }
 
-const saveBtn = document.querySelector('.save-btn');
-const clearBtn = document.querySelector('.clear-btn');
-const closeBtn = document.querySelector('.close-btn');
-const completeBtn = document.querySelector('.complete-btn');
-
+// ------------------------------
+// SAVE / CLEAR / CLOSE
+// ------------------------------
 saveBtn.onclick = () => {
   if (!currentJob) return;
   const data = {
@@ -115,9 +212,9 @@ function updateCompleteButton() {
   completeBtn.classList.toggle('active', allChecked);
 }
 
-const summaryModal = document.getElementById('summaryModal');
-const summaryText = document.getElementById('summaryText');
-
+// ------------------------------
+// COMPLETE SUMMARY
+// ------------------------------
 completeBtn.onclick = () => {
   const job = currentJob;
   const jobNum = document.getElementById('jobNum').value;
@@ -135,6 +232,7 @@ completeBtn.onclick = () => {
   window.open(mailTo, '_blank');
 };
 
+// SUMMARY BUTTONS
 document.querySelector('.print-btn').onclick = () => window.print();
 document.querySelector('.copy-btn').onclick = () => {
   navigator.clipboard.writeText(summaryText.textContent)
@@ -143,4 +241,7 @@ document.querySelector('.copy-btn').onclick = () => {
 };
 document.querySelector('.close-summary').onclick = () => summaryModal.classList.remove('active');
 
-loadChecklists();
+// ------------------------------
+// INITIAL LOAD
+// ------------------------------
+renderButtons();
