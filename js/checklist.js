@@ -1,224 +1,164 @@
-// js/checklist.js
 const checklists = {
-  safetyChecks: [
-    "Torque all road wheels",
-    "Confirm all safety-critical bolts are tightened",
-    "LWNK in car",
-    "Visual check for leaks, damage, or interference",
-    "Final road test vehicle"
+  "Brake Pads": [
+    "Secure vehicle on ramps/jacks",
+    "Check wheel nuts for torque",
+    "Remove road wheels",
+    "Inspect pads for wear",
+    "Check pad sensor connections",
+    "Clean caliper sliding pins",
+    "Install new pads",
+    "Torque caliper bolts to spec",
+    "Check brake fluid level",
+    "Refit wheels and torque nuts"
   ],
-  jobTypes: {
-    "Brake Pads": [
-      "Secure vehicle on ramps/jacks",
-      "Check wheel nuts for torque",
-      "Remove road wheels",
-      "Inspect pads for wear",
-      "Check pad sensor connections",
-      "Clean caliper sliding pins",
-      "Install new pads",
-      "Torque caliper bolts to spec",
-      "Check brake fluid level",
-      "Refit wheels and torque nuts"
-    ],
-    "Brake Pads & Discs": [
-      "Secure vehicle on ramps/jacks",
-      "Remove wheels",
-      "Inspect discs for run-out and wear",
-      "Install new discs and pads",
-      "Torque caliper bolts to spec",
-      "Check brake fluid level",
-      "Refit wheels"
-    ],
-    "Track Rod Ends": [
-      "Secure vehicle on ramps/jacks",
-      "Check steering play",
-      "Remove road wheel",
-      "Remove split pin/cotter pin",
-      "Loosen lock nut",
-      "Remove track rod end",
-      "Install new track rod end to same length",
-      "Torque lock nut and ball joint nut to spec",
-      "Set steering straight and test drive"
-    ],
-    "Shock Absorbers / Springs": [
-      "Secure vehicle and support suspension arm",
-      "Remove wheel",
-      "Check for leaks or damage",
-      "Remove lower and upper shock bolts",
-      "Compress spring (if applicable) safely",
-      "Install new unit and torque all bolts",
-      "Refit wheel"
-    ],
-    "Exhaust": [
-      "Raise vehicle securely",
-      "Inspect old exhaust and mounting points",
-      "Remove old system",
-      "Check exhaust hangers and gaskets",
-      "Fit new exhaust system",
-      "Tighten all clamps and joints",
-      "Check for leaks after start-up"
-    ],
-    "Wheel Bearing": [
-      "Raise vehicle securely",
-      "Check play in wheel bearing",
-      "Remove road wheel and brake components",
-      "Remove hub assembly",
-      "Press out old bearing, clean hub",
-      "Press in new bearing",
-      "Reassemble and torque to spec"
-    ],
-    "Service": [
-      "Secure vehicle",
-      "Check oil level",
-      "Drain old engine oil",
-      "Replace sump washer and tighten",
-      "Install new oil filter",
-      "Replace air/fuel/cabin filters",
-      "Top up fluids",
-      "Check belts and hoses",
-      "Inspect tyres and pressures",
-      "Reset service indicators"
-    ],
-    "Tyres": [
-      "Inspect tyre tread depth and condition",
-      "Check for damage and age cracks",
-      "Set correct tyre pressures",
-      "Torque wheel nuts"
-    ],
-    "Other Job": []
-  }
+  "Brake Pads & Discs": [
+    "Secure vehicle on ramps/jacks",
+    "Remove wheels",
+    "Inspect discs for run-out and wear",
+    "Install new discs and pads",
+    "Torque caliper bolts to spec",
+    "Check brake fluid level",
+    "Refit wheels"
+  ],
+  "Track Rod Ends": [
+    "Secure vehicle on ramps/jacks",
+    "Check steering play",
+    "Remove road wheel",
+    "Remove split pin/cotter pin",
+    "Loosen lock nut",
+    "Remove track rod end",
+    "Install new track rod end to same length",
+    "Torque lock nut and ball joint nut to spec",
+    "Set steering straight and test drive"
+  ],
+  "Shock Absorbers / Springs": [
+    "Secure vehicle and support suspension arm",
+    "Remove wheel",
+    "Check for leaks or damage",
+    "Remove lower and upper shock bolts",
+    "Compress spring (if applicable) safely",
+    "Install new unit and torque all bolts",
+    "Refit wheel"
+  ],
+  "Exhaust": [
+    "Raise vehicle securely",
+    "Inspect old exhaust and mounting points",
+    "Remove old system",
+    "Check exhaust hangers and gaskets",
+    "Fit new exhaust system",
+    "Tighten all clamps and joints",
+    "Check for leaks after start-up"
+  ],
+  "Wheel Bearing": [
+    "Raise vehicle securely",
+    "Check play in wheel bearing",
+    "Remove road wheel and brake components",
+    "Remove hub assembly",
+    "Press out old bearing, clean hub",
+    "Press in new bearing",
+    "Reassemble and torque to spec"
+  ],
+  "Service": [
+    "Secure vehicle",
+    "Check oil level",
+    "Drain old engine oil",
+    "Replace sump washer and tighten",
+    "Install new oil filter",
+    "Replace air/fuel/cabin filters",
+    "Top up fluids",
+    "Check belts and hoses",
+    "Inspect tyres and pressures",
+    "Reset service indicators"
+  ],
+  "Tyres": [
+    "Inspect tyre tread depth and condition",
+    "Check for damage and age cracks",
+    "Set correct tyre pressures",
+    "Torque wheel nuts"
+  ],
+  "Other Job": []
 };
 
-let jobTypes = checklists.jobTypes;
-let safetyChecks = checklists.safetyChecks;
+function renderChecklist(jobName, containerId) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
 
-const grid = document.getElementById('jobGrid');
-const modal = document.getElementById('checkModal');
-const modalTitle = document.getElementById('modalTitle');
-const modalBody = document.getElementById('modalBody');
-const saveBtn = document.querySelector('.save-btn');
-const clearBtn = document.querySelector('.clear-btn');
-const closeBtn = document.querySelector('.close-btn');
-const completeBtn = document.querySelector('.complete-btn');
-const summaryModal = document.getElementById('summaryModal');
-const summaryText = document.getElementById('summaryText');
+  const saved = JSON.parse(localStorage.getItem('checklist_' + jobName) || '{}');
 
-let currentJob = null;
-
-function renderButtons() {
-  grid.innerHTML = "";
-  Object.keys(jobTypes).forEach(job => {
-    const btn = document.createElement('button');
-    btn.textContent = job;
-    btn.className = 'job-btn';
-    btn.onclick = () => openChecklist(job);
-    grid.appendChild(btn);
-  });
-}
-
-function openChecklist(job) {
-  modal.classList.add('active');
-  modalTitle.textContent = job;
-  currentJob = job;
-
-  const saved = JSON.parse(localStorage.getItem('checklist_' + job) || '{}');
-
-  // Populate existing .modal-body directly
-  modalBody.innerHTML = `
+  container.innerHTML = `
+    <h2>${jobName}</h2>
     <label>Job Number: <input id="jobNum" type="text" value="${saved.jobNum || ''}"></label>
     <label>Date/Time: <input id="jobDate" type="text" value="${saved.date || new Date().toLocaleString()}" readonly></label>
     <hr>
-    <div class="editable-section"></div>
+    <div id="checklist-items"></div>
     <button id="addPointBtn" class="mini-btn">+ Add Check Point</button>
     <hr>
     <label><input type="checkbox" id="confirm" ${saved.confirm ? 'checked' : ''}> I confirm the vehicle is safe and ready for release.</label>
+    <div class="modal-footer">
+      <button id="saveBtn">Save</button>
+      <button id="clearBtn">Clear</button>
+      <button id="completeBtn">Complete & Send</button>
+      <button onclick="location.href='../index.html'">Back</button>
+    </div>
   `;
 
-  const editableSection = modalBody.querySelector('.editable-section');
-  jobTypes[job].forEach((item, i) => {
+  const checklistItems = document.getElementById('checklist-items');
+
+  checklists[jobName].forEach((item, i) => {
     const checked = saved['check' + i] ? 'checked' : '';
-    editableSection.innerHTML += `
-      <div class="check-item">
-        <input type="checkbox" id="check${i}" ${checked}>
-        <input type="text" class="editable-text" value="${item}">
-        <button class="delete-btn" onclick="deleteCheckpoint(${i})">🗑</button>
-      </div>`;
+    const div = document.createElement('div');
+    div.className = 'check-item';
+    div.innerHTML = `
+      <input type="checkbox" id="check${i}" ${checked}>
+      <input type="text" class="editable-text" value="${item}">
+      <button onclick="deleteCheckpoint(${i}, '${jobName}')">🗑</button>
+    `;
+    checklistItems.appendChild(div);
   });
 
-  document.getElementById('addPointBtn').onclick = addCheckpoint;
-  updateCompleteButton();
+  document.getElementById('addPointBtn').onclick = () => addCheckpoint(jobName);
+  document.getElementById('saveBtn').onclick = () => saveChecklist(jobName);
+  document.getElementById('clearBtn').onclick = () => clearChecklist(jobName);
+  document.getElementById('completeBtn').onclick = () => completeChecklist(jobName);
 }
 
-function addCheckpoint() {
-  jobTypes[currentJob].push("New checkpoint");
-  openChecklist(currentJob);
+function addCheckpoint(jobName) {
+  checklists[jobName].push("New checkpoint");
+  renderChecklist(jobName, 'checklist-container');
 }
 
-function deleteCheckpoint(index) {
-  jobTypes[currentJob].splice(index, 1);
-  openChecklist(currentJob);
+function deleteCheckpoint(index, jobName) {
+  checklists[jobName].splice(index, 1);
+  renderChecklist(jobName, 'checklist-container');
 }
 
-saveBtn.onclick = () => {
-  if (!currentJob) return;
+function saveChecklist(jobName) {
   const data = {
     jobNum: document.getElementById('jobNum').value,
     date: document.getElementById('jobDate').value
   };
-  const newList = [];
-  modalBody.querySelectorAll('.check-item').forEach((div, i) => {
-    const txt = div.querySelector('.editable-text').value;
-    newList.push(txt);
+  document.querySelectorAll('.check-item').forEach((div, i) => {
     data['check' + i] = div.querySelector('input[type=checkbox]').checked;
+    checklists[jobName][i] = div.querySelector('input.editable-text').value;
   });
   data.confirm = document.getElementById('confirm').checked;
-  jobTypes[currentJob] = newList;
-  localStorage.setItem('checklist_' + currentJob, JSON.stringify(data));
+  localStorage.setItem('checklist_' + jobName, JSON.stringify(data));
   alert('Saved');
-  updateCompleteButton();
-};
-
-clearBtn.onclick = () => {
-  if (!currentJob) return;
-  localStorage.removeItem('checklist_' + currentJob);
-  openChecklist(currentJob);
-  alert('Cleared');
-};
-
-closeBtn.onclick = () => modal.classList.remove('active');
-modalBody.addEventListener('change', updateCompleteButton);
-
-function updateCompleteButton() {
-  if (!currentJob) return;
-  const checks = [...modalBody.querySelectorAll('input[type=checkbox]')];
-  const allChecked = checks.length && checks.every(c => c.checked);
-  completeBtn.disabled = !allChecked;
-  completeBtn.classList.toggle('active', allChecked);
 }
 
-completeBtn.onclick = () => {
-  const job = currentJob;
-  const jobNum = document.getElementById('jobNum').value;
-  const date = document.getElementById('jobDate').value;
-  let body = `Job Type: ${job}\nJob Number: ${jobNum}\nDate/Time: ${date}\n\nCompleted Checks:\n`;
-  jobTypes[job].forEach(item => body += `✓ ${item}\n`);
+function clearChecklist(jobName) {
+  localStorage.removeItem('checklist_' + jobName);
+  renderChecklist(jobName, 'checklist-container');
+  alert('Cleared');
+}
+
+function completeChecklist(jobName) {
+  let body = `Job Type: ${jobName}\nJob Number: ${document.getElementById('jobNum').value}\nDate/Time: ${document.getElementById('jobDate').value}\n\nCompleted Checks:\n`;
+  checklists[jobName].forEach(item => body += `✓ ${item}\n`);
   body += `\nFinal Confirmation: ✓ Vehicle safe and ready for release.\n`;
 
-  summaryText.textContent = body;
-  summaryModal.classList.add('active');
-
   const mailBody = encodeURIComponent(body);
-  const mailSubject = encodeURIComponent(`Completed Safety Checklist – ${job}`);
+  const mailSubject = encodeURIComponent(`Completed Safety Checklist – ${jobName}`);
   const mailTo = `mailto:soren@humphriesandparks.co.uk,Darrell@humphriesandparks.co.uk,michaelrose01795@icloud.com?subject=${mailSubject}&body=${mailBody}`;
   window.open(mailTo, '_blank');
-};
-
-document.querySelector('.print-btn').onclick = () => window.print();
-document.querySelector('.copy-btn').onclick = () => {
-  navigator.clipboard.writeText(summaryText.textContent)
-    .then(() => alert('Summary copied'))
-    .catch(err => alert('Copy failed: ' + err));
-};
-document.querySelector('.close-summary').onclick = () => summaryModal.classList.remove('active');
-
-renderButtons();
+}
