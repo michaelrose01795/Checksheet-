@@ -2,46 +2,47 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Workshop Safety Check Sheets</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Workshop Safety Check Sheets</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-<h1>Workshop Safety Check Sheets</h1>
-<div class="grid" id="jobGrid"></div>
+  <h1>Workshop Safety Check Sheets</h1>
 
-<!-- Modal -->
-<div class="modal" id="checkModal">
-  <div class="modal-content">
-    <div class="modal-header">
+  <!-- Job buttons container -->
+  <div id="jobGrid" class="grid"></div>
+
+  <!-- Checklist Modal -->
+  <div id="checkModal" class="modal">
+    <div class="modal-content">
       <h2 id="modalTitle"></h2>
-    </div>
-    <div class="modal-body" id="modalBody"></div>
-    <div class="modal-footer">
-      <button class="save-btn">Save</button>
-      <button class="clear-btn">Clear</button>
-      <button class="complete-btn" disabled>Complete & Send</button>
-      <button class="close-btn">Close</button>
-    </div>
-  </div>
-</div>
-
-<!-- Summary Popup -->
-<div class="summary" id="summaryModal">
-  <div class="summary-content">
-    <h3>Checklist Summary</h3>
-    <pre id="summaryText"></pre>
-    <div class="summary-buttons">
-      <button class="print-btn">Print</button>
-      <button class="copy-btn">Copy</button>
-      <button class="close-summary">Close</button>
+      <div id="modalBody"></div>
+      <div class="modal-footer">
+        <button class="save-btn">Save</button>
+        <button class="clear-btn">Clear</button>
+        <button class="complete-btn" disabled>Complete & Send</button>
+        <button class="close-btn">Close</button>
+      </div>
     </div>
   </div>
-</div>
 
-<script src="js/checklist.js"></script>
+  <!-- Summary Modal -->
+  <div id="summaryModal" class="summary">
+    <div class="summary-content">
+      <h3>Checklist Summary</h3>
+      <pre id="summaryText"></pre>
+      <div class="summary-buttons">
+        <button class="print-btn">Print</button>
+        <button class="copy-btn">Copy</button>
+        <button class="close-summary">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Load JS -->
+  <script src="js/checklist.js"></script>
 </body>
 </html>
