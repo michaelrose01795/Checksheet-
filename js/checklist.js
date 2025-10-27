@@ -97,7 +97,7 @@ function renderChecklist(jobName, containerId) {
     <hr>
     <label><input type="checkbox" id="confirm" ${saved.confirm ? 'checked' : ''}> I confirm the vehicle is safe and ready for release.</label>
     <label>Double checked by: 
-      <select id="doubleChecker">
+      <select id="doubleChecker" class="modern-select">
         ${checkers.map(name => `<option value="${name}" ${saved.doubleChecker === name ? 'selected' : ''}>${name}</option>`).join('')}
       </select>
       <input type="checkbox" id="allOk" ${saved.allOk ? 'checked' : ''}> All OK
