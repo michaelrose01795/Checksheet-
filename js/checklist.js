@@ -7,7 +7,7 @@ let safetyChecks = [];
 
 async function loadChecklists() {
   try {
-    const res = await fetch('checklists.json');
+    const res = await fetch('js/checklists.json');
     if (!res.ok) throw new Error('Failed to load checklists.json');
     const data = await res.json();
     safetyChecks = data.safetyChecks || [];
