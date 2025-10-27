@@ -1,105 +1,22 @@
 // ------------------------------
-// SAFETY-CRITICAL BASE CHECKS
+// LOAD CHECKLISTS FROM JSON FILE
 // ------------------------------
-const safetyChecks = [
-  "Torque all road wheels",
-  "Confirm all safety-critical bolts are tightened",
-  "LWNK in car",
-  "Visual check for leaks, damage, or interference",
-  "Final road test vehicle"
-];
+let jobTypes = {};
+let safetyChecks = [];
 
-// ------------------------------
-// JOB CHECKLISTS
-// ------------------------------
-let jobTypes = {
-  "Brake Pads": [
-    "Secure vehicle on ramps/jacks",
-    "Check wheel nuts for torque",
-    "Remove road wheels",
-    "Inspect pads for wear",
-    "Check pad sensor connections",
-    "Clean caliper sliding pins",
-    "Install new pads",
-    "Torque caliper bolts to spec",
-    "Check brake fluid level",
-    "Refit wheels and torque nuts",
-    ...safetyChecks
-  ],
-  "Brake Pads & Discs": [
-    "Secure vehicle on ramps/jacks",
-    "Remove wheels",
-    "Inspect discs for run-out and wear",
-    "Install new discs and pads",
-    "Torque caliper bolts to spec",
-    "Check brake fluid level",
-    "Refit wheels",
-    ...safetyChecks
-  ],
-  "Track Rod Ends": [
-    "Secure vehicle on ramps/jacks",
-    "Check steering play",
-    "Remove road wheel",
-    "Remove split pin/cotter pin",
-    "Loosen lock nut",
-    "Remove track rod end",
-    "Install new track rod end to same length",
-    "Torque lock nut and ball joint nut to spec",
-    "Set steering straight and test drive",
-    ...safetyChecks
-  ],
-  "Shock Absorbers / Springs": [
-    "Secure vehicle and support suspension arm",
-    "Remove wheel",
-    "Check for leaks or damage",
-    "Remove lower and upper shock bolts",
-    "Compress spring (if applicable) safely",
-    "Install new unit and torque all bolts",
-    "Refit wheel",
-    ...safetyChecks
-  ],
-  "Exhaust": [
-    "Raise vehicle securely",
-    "Inspect old exhaust and mounting points",
-    "Remove old system",
-    "Check exhaust hangers and gaskets",
-    "Fit new exhaust system",
-    "Tighten all clamps and joints",
-    "Check for leaks after start-up",
-    ...safetyChecks
-  ],
-  "Wheel Bearing": [
-    "Raise vehicle securely",
-    "Check play in wheel bearing",
-    "Remove road wheel and brake components",
-    "Remove hub assembly",
-    "Press out old bearing, clean hub",
-    "Press in new bearing",
-    "Reassemble and torque to spec",
-    ...safetyChecks
-  ],
-  "Service": [
-    "Secure vehicle",
-    "Check oil level",
-    "Drain old engine oil",
-    "Replace sump washer and tighten",
-    "Install new oil filter",
-    "Replace air/fuel/cabin filters",
-    "Top up fluids",
-    "Check belts and hoses",
-    "Inspect tyres and pressures",
-    "Reset service indicators",
-    ...safetyChecks
-  ],
-  "Tyres": [
-    "Inspect tyre tread depth and condition",
-    "Check for damage and age cracks",
-    "Set correct tyre pressures",
-    "Torque wheel nuts",
-    ...safetyChecks
-  ],
-  "Other Job": []
-};
+async function loadChecklists() {
+  try {
+    const res = await fetch('checklists.json');
+    if (!res.ok) throw new Error('Failed to load checklists.json');
+    const data = await res.json();
+    safetyChecks = data.safetyChecks || [];
+    jobTypes = data.jobTypes || {};
+    renderButtons();
+  } catch (err) {
+    console.error('Error loading checklists:', err);
+    document.getElementById('jobGrid').innerHTML = `<p style="color:red;">Failed to load checklists.json</p>`;
+  }
+}
 
 // ------------------------------
 // RENDER JOB BUTTONS
@@ -115,7 +32,6 @@ function renderButtons() {
     grid.appendChild(btn);
   });
 }
-renderButtons();
 
 // ------------------------------
 // MODAL SETUP
@@ -247,3 +163,8 @@ document.querySelector('.copy-btn').onclick = () => {
     .catch(err => alert('Copy failed: ' + err));
 };
 document.querySelector('.close-summary').onclick = () => summaryModal.classList.remove('active');
+
+// ------------------------------
+// INITIAL LOAD
+// ------------------------------
+loadChecklists();
