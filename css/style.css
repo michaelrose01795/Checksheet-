@@ -46,72 +46,103 @@ button.job-btn {
   font-size: 16px;
   border-radius: 14px;
   cursor: pointer;
-  transition: 0.2s ease;
-  box-shadow: 0 3px 6px var(--shadow);
+  transition: 0.3s ease, transform 0.2s ease;
+  box-shadow: 0 4px 12px var(--shadow);
 }
 
 button.job-btn:hover {
   background: #e9e9e9;
-  transform: translateY(-2px);
-  box-shadow: 0 5px 10px var(--shadow);
+  transform: translateY(-3px);
+  box-shadow: 0 6px 15px var(--shadow);
 }
 
-/* Modal styling */
-.modal {
+/* Modal overlay */
+.modal, .summary {
   display: none;
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.4);
+  background: rgba(0, 0, 0, 0.5);
   justify-content: center;
   align-items: center;
   padding: 20px;
   z-index: 999;
+  backdrop-filter: blur(3px);
 }
 
-.modal.active {
+.modal.active, .summary.active {
   display: flex;
 }
 
-.modal-content {
-  background: #fff;
-  border-radius: 12px;
+/* Modal box */
+.modal-content, .summary-content {
+  background: #fdfdfd;
+  border-radius: 16px;
   max-width: 600px;
   width: 100%;
-  padding: 25px;
+  padding: 30px;
   color: var(--text);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
+  transform: translateY(-20px);
+  opacity: 0;
+  transition: transform 0.3s ease, opacity 0.3s ease;
 }
 
+.modal.active .modal-content,
+.summary.active .summary-content {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+/* Inputs & labels */
 label {
   display: block;
-  margin: 8px 0;
+  margin: 10px 0 5px;
+  font-weight: 500;
 }
 
 input[type="checkbox"] {
-  transform: scale(1.2);
-  margin-right: 8px;
+  accent-color: var(--accent);
+  width: 20px;
+  height: 20px;
+  margin-right: 10px;
+  cursor: pointer;
 }
 
+.editable-text {
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 6px 10px;
+  width: calc(100% - 60px);
+  margin-right: 10px;
+  font-size: 14px;
+}
+
+/* Modal footer buttons */
 .modal-footer {
-  margin-top: 15px;
+  margin-top: 20px;
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: 12px;
   justify-content: flex-end;
 }
 
 .modal-footer button {
-  padding: 10px 16px;
+  padding: 10px 20px;
   border: none;
-  border-radius: 8px;
+  border-radius: 12px;
   cursor: pointer;
   font-weight: 500;
-  transition: 0.2s ease;
-  box-shadow: 0 2px 6px var(--shadow);
+  transition: transform 0.2s ease, background 0.2s ease;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
 }
 
+.modal-footer button:hover {
+  transform: translateY(-2px);
+}
+
+/* Specific buttons */
 .save-btn {
-  background: #0078d4;
+  background: var(--accent);
   color: #fff;
 }
 .clear-btn {
@@ -131,44 +162,27 @@ input[type="checkbox"] {
   opacity: 1;
 }
 
-/* Summary modal */
-.summary {
-  display: none;
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.4);
-  justify-content: center;
-  align-items: center;
-  padding: 20px;
-  z-index: 1000;
-}
-
-.summary.active {
-  display: flex;
-}
-
-.summary-content {
-  background: #fff;
-  border-radius: 12px;
-  padding: 25px;
-  max-width: 700px;
-  width: 100%;
-  color: var(--text);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+/* Summary modal text */
+.summary-content h3 {
+  margin-top: 0;
+  font-size: 18px;
+  font-weight: 600;
 }
 
 .summary-content pre {
   background: #f7f7f7;
-  padding: 12px;
-  border-radius: 8px;
+  padding: 15px;
+  border-radius: 10px;
   color: #333;
   white-space: pre-wrap;
   font-family: monospace;
   border: 1px solid #e0e0e0;
+  margin-top: 10px;
 }
 
+/* Summary buttons */
 .summary-buttons {
-  margin-top: 10px;
+  margin-top: 15px;
   display: flex;
   gap: 10px;
   justify-content: flex-end;
@@ -177,21 +191,37 @@ input[type="checkbox"] {
 .print-btn,
 .copy-btn,
 .close-summary {
-  padding: 10px 16px;
+  padding: 10px 20px;
   border: none;
-  border-radius: 8px;
+  border-radius: 12px;
   cursor: pointer;
   color: #fff;
   font-weight: 500;
-  box-shadow: 0 2px 6px var(--shadow);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  transition: transform 0.2s ease, background 0.2s ease;
 }
 
-.print-btn {
-  background: #0078d4;
+.print-btn { background: var(--accent); }
+.copy-btn { background: #444; }
+.close-summary { background: #888; }
+
+.print-btn:hover { background: #005ea6; transform: translateY(-2px); }
+.copy-btn:hover { background: #222; transform: translateY(-2px); }
+.close-summary:hover { background: #666; transform: translateY(-2px); }
+
+/* Checkpoint delete button */
+.delete-btn {
+  background: #ff4d4d;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  padding: 4px 8px;
+  transition: 0.2s ease;
 }
-.copy-btn {
-  background: #444;
-}
-.close-summary {
-  background: #888;
+
+.delete-btn:hover {
+  background: #cc0000;
+  transform: translateY(-1px);
 }
