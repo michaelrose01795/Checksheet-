@@ -8,7 +8,6 @@
   font-family: 'Roboto', sans-serif;
 }
 
-/* Base layout */
 body {
   margin: 0;
   background-color: var(--primary);
@@ -29,17 +28,14 @@ h1 {
   color: var(--text);
 }
 
-/* Job button grid */
 .grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 20px;
   width: 100%;
   max-width: 1100px;
-  box-sizing: border-box;
 }
 
-/* Buttons – soft bubble style */
 button.job-btn {
   background: var(--secondary);
   color: var(--text);
@@ -58,7 +54,6 @@ button.job-btn:hover {
   box-shadow: 0 6px 15px var(--shadow);
 }
 
-/* Modal overlay */
 .modal, .summary {
   display: none;
   position: fixed;
@@ -75,21 +70,17 @@ button.job-btn:hover {
   display: flex;
 }
 
-/* Modal box */
 .modal-content, .summary-content {
   background: #fdfdfd;
   border-radius: 16px;
   max-width: 85%;
   width: 500px;
-  max-height: 55vh;
+  max-height: 70vh;
   display: flex;
   flex-direction: column;
   padding: 25px;
   color: var(--text);
   box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
-  transform: translateY(-20px);
-  opacity: 0;
-  transition: transform 0.3s ease, opacity 0.3s ease;
   overflow: hidden;
 }
 
@@ -99,7 +90,6 @@ button.job-btn:hover {
   opacity: 1;
 }
 
-/* Modal body scrollable */
 .modal-body {
   flex: 1 1 auto;
   overflow-y: auto;
@@ -131,7 +121,6 @@ input[type="checkbox"] {
   font-size: 14px;
 }
 
-/* Modal footer buttons */
 .modal-footer {
   flex-shrink: 0;
   display: flex;
@@ -155,14 +144,12 @@ input[type="checkbox"] {
   transform: translateY(-2px);
 }
 
-/* Specific buttons */
 .save-btn { background: var(--accent); color: #fff; }
 .clear-btn { background: #888; color: #fff; }
 .close-btn { background: #ccc; color: #333; }
 .complete-btn { background: #28a745; color: #fff; opacity: 0.6; }
 .complete-btn.active { opacity: 1; }
 
-/* Summary modal text */
 .summary-content h3 {
   margin-top: 0;
   font-size: 18px;
@@ -182,7 +169,6 @@ input[type="checkbox"] {
   margin-top: 10px;
 }
 
-/* Summary buttons */
 .summary-buttons {
   margin-top: 15px;
   display: flex;
@@ -209,7 +195,6 @@ input[type="checkbox"] {
 .copy-btn:hover { background: #222; transform: translateY(-2px); }
 .close-summary:hover { background: #666; transform: translateY(-2px); }
 
-/* Checkpoint delete button */
 .delete-btn {
   background: #ff4d4d;
   color: #fff;
@@ -226,7 +211,6 @@ input[type="checkbox"] {
   transform: translateY(-1px);
 }
 
-/* Responsive adjustments */
 @media (min-width: 768px) and (max-width: 1024px) {
   .grid { grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 25px; }
   .modal-content, .summary-content { width: 80%; max-height: 50vh; padding: 30px 25px; }
