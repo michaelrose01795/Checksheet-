@@ -1,7 +1,4 @@
-// file: js/checklist.js
-// ------------------------------
-// EMBEDDED CHECKLIST DATA
-// ------------------------------
+// js/checklist.js
 const checklists = {
   safetyChecks: [
     "Torque all road wheels",
@@ -92,9 +89,6 @@ const checklists = {
   }
 };
 
-// ------------------------------
-// INITIALIZE VARIABLES
-// ------------------------------
 let jobTypes = checklists.jobTypes;
 let safetyChecks = checklists.safetyChecks;
 
@@ -111,9 +105,6 @@ const summaryText = document.getElementById('summaryText');
 
 let currentJob = null;
 
-// ------------------------------
-// RENDER JOB BUTTONS
-// ------------------------------
 function renderButtons() {
   grid.innerHTML = "";
   Object.keys(jobTypes).forEach(job => {
@@ -125,17 +116,13 @@ function renderButtons() {
   });
 }
 
-// ------------------------------
-// OPEN CHECKLIST MODAL
-// ------------------------------
 function openChecklist(job) {
   modal.classList.add('active');
   modalTitle.textContent = job;
   currentJob = job;
 
   const saved = JSON.parse(localStorage.getItem('checklist_' + job) || '{}');
-  
-  // Wrap content in scrollable modal-body
+
   modalBody.innerHTML = `
     <div class="modal-body">
       <label>Job Number: <input id="jobNum" type="text" value="${saved.jobNum || ''}"></label>
@@ -163,9 +150,6 @@ function openChecklist(job) {
   updateCompleteButton();
 }
 
-// ------------------------------
-// ADD / DELETE CHECKPOINTS
-// ------------------------------
 function addCheckpoint() {
   jobTypes[currentJob].push("New checkpoint");
   openChecklist(currentJob);
@@ -176,9 +160,6 @@ function deleteCheckpoint(index) {
   openChecklist(currentJob);
 }
 
-// ------------------------------
-// SAVE / CLEAR / CLOSE
-// ------------------------------
 saveBtn.onclick = () => {
   if (!currentJob) return;
   const data = {
@@ -216,9 +197,6 @@ function updateCompleteButton() {
   completeBtn.classList.toggle('active', allChecked);
 }
 
-// ------------------------------
-// COMPLETE SUMMARY
-// ------------------------------
 completeBtn.onclick = () => {
   const job = currentJob;
   const jobNum = document.getElementById('jobNum').value;
@@ -236,7 +214,6 @@ completeBtn.onclick = () => {
   window.open(mailTo, '_blank');
 };
 
-// SUMMARY BUTTONS
 document.querySelector('.print-btn').onclick = () => window.print();
 document.querySelector('.copy-btn').onclick = () => {
   navigator.clipboard.writeText(summaryText.textContent)
@@ -245,7 +222,4 @@ document.querySelector('.copy-btn').onclick = () => {
 };
 document.querySelector('.close-summary').onclick = () => summaryModal.classList.remove('active');
 
-// ------------------------------
-// INITIAL LOAD
-// ------------------------------
 renderButtons();

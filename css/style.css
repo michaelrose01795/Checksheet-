@@ -80,8 +80,8 @@ button.job-btn:hover {
   background: #fdfdfd;
   border-radius: 16px;
   max-width: 85%;
-  width: 500px;       /* slightly smaller width */
-  max-height: 55vh;   /* smaller height */
+  width: 500px;
+  max-height: 55vh;
   display: flex;
   flex-direction: column;
   padding: 25px;
@@ -99,12 +99,12 @@ button.job-btn:hover {
   opacity: 1;
 }
 
-/* Modal body scrollable always */
+/* Modal body scrollable */
 .modal-body {
   flex: 1 1 auto;
-  overflow-y: scroll; /* always scrollable */
+  overflow-y: auto;
   margin-bottom: 15px;
-  padding-right: 5px;
+  padding-right: 10px;
 }
 
 /* Inputs & labels */
@@ -156,26 +156,11 @@ input[type="checkbox"] {
 }
 
 /* Specific buttons */
-.save-btn {
-  background: var(--accent);
-  color: #fff;
-}
-.clear-btn {
-  background: #888;
-  color: #fff;
-}
-.close-btn {
-  background: #ccc;
-  color: #333;
-}
-.complete-btn {
-  background: #28a745;
-  color: #fff;
-  opacity: 0.6;
-}
-.complete-btn.active {
-  opacity: 1;
-}
+.save-btn { background: var(--accent); color: #fff; }
+.clear-btn { background: #888; color: #fff; }
+.close-btn { background: #ccc; color: #333; }
+.complete-btn { background: #28a745; color: #fff; opacity: 0.6; }
+.complete-btn.active { opacity: 1; }
 
 /* Summary modal text */
 .summary-content h3 {
@@ -185,8 +170,8 @@ input[type="checkbox"] {
 }
 
 .summary-content pre {
-  max-height: 35vh; /* smaller for summary */
-  overflow-y: scroll; /* always scrollable */
+  max-height: 35vh;
+  overflow-y: auto;
   background: #f7f7f7;
   padding: 15px;
   border-radius: 10px;
@@ -205,9 +190,7 @@ input[type="checkbox"] {
   justify-content: flex-end;
 }
 
-.print-btn,
-.copy-btn,
-.close-summary {
+.print-btn, .copy-btn, .close-summary {
   padding: 10px 20px;
   border: none;
   border-radius: 12px;
@@ -243,32 +226,11 @@ input[type="checkbox"] {
   transform: translateY(-1px);
 }
 
-/* Responsive adjustments for tablets & iPads */
+/* Responsive adjustments */
 @media (min-width: 768px) and (max-width: 1024px) {
-  .grid {
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-    gap: 25px;
-  }
-  .modal-content, .summary-content {
-    width: 80%;
-    max-height: 50vh; /* smaller for tablets */
-    padding: 30px 25px;
-  }
-  body {
-    font-size: 17px;
-  }
-  button.job-btn {
-    font-size: 18px;
-    padding: 20px;
-  }
-  .editable-text {
-    font-size: 16px;
-    padding: 8px 12px;
-  }
-}
-
-/* Modal-body always scrollable */
-.modal-body {
-  overflow-y: scroll;
-  padding-right: 10px;
+  .grid { grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 25px; }
+  .modal-content, .summary-content { width: 80%; max-height: 50vh; padding: 30px 25px; }
+  body { font-size: 17px; }
+  button.job-btn { font-size: 18px; padding: 20px; }
+  .editable-text { font-size: 16px; padding: 8px 12px; }
 }
