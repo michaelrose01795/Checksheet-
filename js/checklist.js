@@ -1,3 +1,4 @@
+// file: js/checklist.js
 const checklists = {
   "Brake Pads": [
     "Secure vehicle on ramps/jacks",
