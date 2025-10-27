@@ -1,7 +1,4 @@
-// file: js/checklist.js
-// ------------------------------
-// LOAD CHECKLISTS FROM JSON FILE
-// ------------------------------
+// js/checklist.js
 let jobTypes = {};
 let safetyChecks = [];
 
@@ -19,9 +16,6 @@ async function loadChecklists() {
   }
 }
 
-// ------------------------------
-// RENDER JOB BUTTONS
-// ------------------------------
 const grid = document.getElementById('jobGrid');
 function renderButtons() {
   grid.innerHTML = "";
@@ -34,17 +28,11 @@ function renderButtons() {
   });
 }
 
-// ------------------------------
-// MODAL SETUP
-// ------------------------------
 const modal = document.getElementById('checkModal');
 const modalTitle = document.getElementById('modalTitle');
 const modalBody = document.getElementById('modalBody');
 let currentJob = null;
 
-// ------------------------------
-// OPEN CHECKLIST
-// ------------------------------
 function openChecklist(job) {
   modal.classList.add('active');
   modalTitle.textContent = job;
@@ -76,9 +64,6 @@ function openChecklist(job) {
   updateCompleteButton();
 }
 
-// ------------------------------
-// ADD / DELETE CHECKPOINTS
-// ------------------------------
 function addCheckpoint() {
   jobTypes[currentJob].push("New checkpoint");
   openChecklist(currentJob);
@@ -88,9 +73,6 @@ function deleteCheckpoint(index) {
   openChecklist(currentJob);
 }
 
-// ------------------------------
-// SAVE / CLEAR / CLOSE
-// ------------------------------
 const saveBtn = document.querySelector('.save-btn');
 const clearBtn = document.querySelector('.clear-btn');
 const closeBtn = document.querySelector('.close-btn');
@@ -109,7 +91,7 @@ saveBtn.onclick = () => {
     data['check' + i] = div.querySelector('input[type=checkbox]').checked;
   });
   data.confirm = document.getElementById('confirm').checked;
-  jobTypes[currentJob] = newList; // Save any edits
+  jobTypes[currentJob] = newList;
   localStorage.setItem('checklist_' + currentJob, JSON.stringify(data));
   alert('Saved');
   updateCompleteButton();
@@ -133,9 +115,6 @@ function updateCompleteButton() {
   completeBtn.classList.toggle('active', allChecked);
 }
 
-// ------------------------------
-// COMPLETE SUMMARY
-// ------------------------------
 const summaryModal = document.getElementById('summaryModal');
 const summaryText = document.getElementById('summaryText');
 
@@ -156,7 +135,6 @@ completeBtn.onclick = () => {
   window.open(mailTo, '_blank');
 };
 
-// SUMMARY BUTTONS
 document.querySelector('.print-btn').onclick = () => window.print();
 document.querySelector('.copy-btn').onclick = () => {
   navigator.clipboard.writeText(summaryText.textContent)
@@ -165,7 +143,4 @@ document.querySelector('.copy-btn').onclick = () => {
 };
 document.querySelector('.close-summary').onclick = () => summaryModal.classList.remove('active');
 
-// ------------------------------
-// INITIAL LOAD
-// ------------------------------
 loadChecklists();

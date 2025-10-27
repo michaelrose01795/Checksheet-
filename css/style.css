@@ -82,26 +82,6 @@ button.job-btn:hover {
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
 }
 
-.modal-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 10px;
-}
-
-.modal-header h2 {
-  margin: 0;
-  font-size: 20px;
-  font-weight: 600;
-  color: var(--text);
-}
-
-.modal-body {
-  max-height: 65vh;
-  overflow-y: auto;
-  padding-right: 10px;
-}
-
 label {
   display: block;
   margin: 8px 0;
@@ -175,13 +155,6 @@ input[type="checkbox"] {
   width: 100%;
   color: var(--text);
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-}
-
-.summary-content h3 {
-  margin-top: 0;
-  font-size: 18px;
-  font-weight: 600;
-  color: var(--text);
 }
 
 .summary-content pre {
