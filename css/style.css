@@ -1,4 +1,4 @@
- /* css/style.css */
+/* css/style.css */
 :root {
   --primary: #ffffff;
   --secondary: #f4f4f4;
@@ -81,7 +81,7 @@ button.job-btn:hover {
   border-radius: 16px;
   max-width: 90%;
   width: 600px;
-  max-height: 90vh;
+  max-height: 60vh; /* reduced height */
   display: flex;
   flex-direction: column;
   padding: 30px;
@@ -102,7 +102,7 @@ button.job-btn:hover {
 /* Modal body scrollable always */
 .modal-body {
   flex: 1 1 auto;
-  overflow-y: scroll; /* always show scrollbar */
+  overflow-y: scroll; /* always scrollable */
   margin-bottom: 15px;
   padding-right: 5px;
 }
@@ -185,7 +185,7 @@ input[type="checkbox"] {
 }
 
 .summary-content pre {
-  max-height: 50vh;
+  max-height: 40vh; /* reduced height */
   overflow-y: scroll; /* always scrollable */
   background: #f7f7f7;
   padding: 15px;
@@ -251,7 +251,7 @@ input[type="checkbox"] {
   }
   .modal-content, .summary-content {
     width: 80%;
-    max-height: 85vh;
+    max-height: 55vh; /* smaller for tablets */
     padding: 35px 30px;
   }
   body {
