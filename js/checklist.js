@@ -79,6 +79,8 @@ const checklists = {
   "Other Job": []
 };
 
+const checkers = ["Glen", "Darrell", "Soren", "Jake", "Scott", "Paul", "Cheryl"];
+
 function renderChecklist(jobName, containerId) {
   const container = document.getElementById(containerId);
   if (!container) return;
@@ -94,6 +96,12 @@ function renderChecklist(jobName, containerId) {
     <button id="addPointBtn" class="mini-btn">+ Add Check Point</button>
     <hr>
     <label><input type="checkbox" id="confirm" ${saved.confirm ? 'checked' : ''}> I confirm the vehicle is safe and ready for release.</label>
+    <label>Double checked by: 
+      <select id="doubleChecker">
+        ${checkers.map(name => `<option value="${name}" ${saved.doubleChecker === name ? 'selected' : ''}>${name}</option>`).join('')}
+      </select>
+      <input type="checkbox" id="allOk" ${saved.allOk ? 'checked' : ''}> All OK
+    </label>
     <div class="modal-footer">
       <button id="saveBtn">Save</button>
       <button id="clearBtn">Clear</button>
@@ -135,7 +143,9 @@ function deleteCheckpoint(index, jobName) {
 function saveChecklist(jobName) {
   const data = {
     jobNum: document.getElementById('jobNum').value,
-    date: document.getElementById('jobDate').value
+    date: document.getElementById('jobDate').value,
+    doubleChecker: document.getElementById('doubleChecker').value,
+    allOk: document.getElementById('allOk').checked
   };
   document.querySelectorAll('.check-item').forEach((div, i) => {
     data['check' + i] = div.querySelector('input[type=checkbox]').checked;
@@ -153,9 +163,15 @@ function clearChecklist(jobName) {
 }
 
 function completeChecklist(jobName) {
-  let body = `Job Type: ${jobName}\nJob Number: ${document.getElementById('jobNum').value}\nDate/Time: ${document.getElementById('jobDate').value}\n\nCompleted Checks:\n`;
+  const jobNum = document.getElementById('jobNum').value;
+  const date = document.getElementById('jobDate').value;
+  const doubleChecker = document.getElementById('doubleChecker').value;
+  const allOk = document.getElementById('allOk').checked ? '✓' : '✗';
+
+  let body = `Job Type: ${jobName}\nJob Number: ${jobNum}\nDate/Time: ${date}\n\nCompleted Checks:\n`;
   checklists[jobName].forEach(item => body += `✓ ${item}\n`);
   body += `\nFinal Confirmation: ✓ Vehicle safe and ready for release.\n`;
+  body += `Double Checked By: ${doubleChecker} – ${allOk} All OK\n`;
 
   const mailBody = encodeURIComponent(body);
   const mailSubject = encodeURIComponent(`Completed Safety Checklist – ${jobName}`);
