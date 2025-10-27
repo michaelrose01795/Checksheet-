@@ -1,4 +1,4 @@
-
+// file: js/checklist.js
 // ------------------------------
 // LOAD CHECKLISTS FROM JSON FILE
 // ------------------------------
