@@ -54,6 +54,7 @@ button.job-btn:hover {
   box-shadow: 0 6px 15px var(--shadow);
 }
 
+/* Modal popups (legacy) */
 .modal, .summary {
   display: none;
   position: fixed;
@@ -84,12 +85,6 @@ button.job-btn:hover {
   overflow: hidden;
 }
 
-.modal.active .modal-content,
-.summary.active .summary-content {
-  transform: translateY(0);
-  opacity: 1;
-}
-
 .modal-body {
   flex: 1 1 auto;
   overflow-y: auto;
@@ -97,7 +92,6 @@ button.job-btn:hover {
   padding-right: 10px;
 }
 
-/* Inputs & labels */
 label {
   display: block;
   margin: 10px 0 5px;
@@ -209,6 +203,79 @@ input[type="checkbox"] {
 .delete-btn:hover {
   background: #cc0000;
   transform: translateY(-1px);
+}
+
+/* ---------------- Modern full-page checklist ---------------- */
+.checklist-page {
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 20px;
+  background: var(--secondary);
+  border-radius: 16px;
+  box-shadow: 0 8px 20px var(--shadow);
+  display: flex;
+  flex-direction: column;
+  min-height: 90vh;
+}
+
+.checklist-page h2 {
+  font-size: 28px;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+#checklist-items {
+  flex: 1;
+  overflow-y: auto;
+  margin-bottom: 15px;
+  padding-right: 10px;
+}
+
+.check-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+  gap: 10px;
+}
+
+.check-item input.editable-text {
+  flex: 1;
+  padding: 8px 12px;
+  font-size: 16px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+}
+
+#addPointBtn {
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 12px;
+  cursor: pointer;
+  margin-bottom: 10px;
+  font-weight: 500;
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+
+#addPointBtn:hover {
+  transform: translateY(-2px);
+  background: #005ea6;
+}
+
+.modal-footer button#saveBtn { background: var(--accent); color: #fff; }
+.modal-footer button#clearBtn { background: #888; color: #fff; }
+.modal-footer button#completeBtn { background: #28a745; color: #fff; }
+.modal-footer button#completeBtn:disabled { opacity: 0.6; cursor: not-allowed; }
+.modal-footer button#completeBtn.active { opacity: 1; }
+.modal-footer button:last-child { background: #ccc; color: #333; }
+
+label input[type="checkbox"] {
+  width: 22px;
+  height: 22px;
+  margin-right: 10px;
+  cursor: pointer;
 }
 
 @media (min-width: 768px) and (max-width: 1024px) {
