@@ -81,18 +81,30 @@ button.job-btn:hover {
   border-radius: 16px;
   max-width: 90%;
   width: 600px;
+  max-height: 90vh; /* restrict height to viewport */
+  display: flex;
+  flex-direction: column;
   padding: 30px;
   color: var(--text);
   box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
   transform: translateY(-20px);
   opacity: 0;
   transition: transform 0.3s ease, opacity 0.3s ease;
+  overflow: hidden;
 }
 
 .modal.active .modal-content,
 .summary.active .summary-content {
   transform: translateY(0);
   opacity: 1;
+}
+
+/* Modal body scroll */
+.modal-body {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  margin-bottom: 15px;
+  padding-right: 5px;
 }
 
 /* Inputs & labels */
@@ -121,11 +133,12 @@ input[type="checkbox"] {
 
 /* Modal footer buttons */
 .modal-footer {
-  margin-top: 20px;
+  flex-shrink: 0;
   display: flex;
   flex-wrap: wrap;
   gap: 12px;
   justify-content: flex-end;
+  margin-top: 10px;
 }
 
 .modal-footer button {
@@ -172,6 +185,8 @@ input[type="checkbox"] {
 }
 
 .summary-content pre {
+  max-height: 50vh;
+  overflow-y: auto;
   background: #f7f7f7;
   padding: 15px;
   border-radius: 10px;
@@ -228,7 +243,7 @@ input[type="checkbox"] {
   transform: translateY(-1px);
 }
 
-/* Responsive adjustments */
+/* Responsive adjustments for tablets & iPads */
 @media (min-width: 768px) and (max-width: 1024px) {
   .grid {
     grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
@@ -236,6 +251,7 @@ input[type="checkbox"] {
   }
   .modal-content, .summary-content {
     width: 80%;
+    max-height: 85vh;
     padding: 35px 30px;
   }
   body {
@@ -253,7 +269,7 @@ input[type="checkbox"] {
 
 /* Adjust modal-body scroll for smaller devices */
 .modal-body {
-  max-height: 60vh;
+  max-height: 70vh;
   overflow-y: auto;
   padding-right: 10px;
 }
