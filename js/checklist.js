@@ -134,13 +134,18 @@ function openChecklist(job) {
   currentJob = job;
 
   const saved = JSON.parse(localStorage.getItem('checklist_' + job) || '{}');
+  
+  // Wrap content in scrollable modal-body
   modalBody.innerHTML = `
-    <label>Job Number: <input id="jobNum" type="text" value="${saved.jobNum || ''}"></label>
-    <label>Date/Time: <input id="jobDate" type="text" value="${saved.date || new Date().toLocaleString()}" readonly></label>
-    <hr>
-    <div class="editable-section"></div>
-    <button id="addPointBtn" class="mini-btn">+ Add Check Point</button>
-    <hr>
+    <div class="modal-body">
+      <label>Job Number: <input id="jobNum" type="text" value="${saved.jobNum || ''}"></label>
+      <label>Date/Time: <input id="jobDate" type="text" value="${saved.date || new Date().toLocaleString()}" readonly></label>
+      <hr>
+      <div class="editable-section"></div>
+      <button id="addPointBtn" class="mini-btn">+ Add Check Point</button>
+      <hr>
+      <label><input type="checkbox" id="confirm" ${saved.confirm ? 'checked' : ''}> I confirm the vehicle is safe and ready for release.</label>
+    </div>
   `;
 
   const editableSection = modalBody.querySelector('.editable-section');
@@ -154,7 +159,6 @@ function openChecklist(job) {
       </div>`;
   });
 
-  modalBody.innerHTML += `<hr><label><input type="checkbox" id="confirm" ${saved.confirm ? 'checked' : ''}> I confirm the vehicle is safe and ready for release.</label>`;
   document.getElementById('addPointBtn').onclick = addCheckpoint;
   updateCompleteButton();
 }
