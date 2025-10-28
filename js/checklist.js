@@ -87,10 +87,22 @@ function renderChecklist(jobName, containerId) {
   if (!container) return;
 
   const saved = JSON.parse(localStorage.getItem('checklist_' + jobName) || '{}');
+  const isOther = jobName === "Other Job";
 
   container.innerHTML = `
     <h2>${jobName}</h2>
     <label>Job Number: <input id="jobNum" type="text" value="${saved.jobNum || ''}"></label>
+    ${isOther ? `
+      <label>Select Job Type: 
+        <select id="jobTypeSelect">
+          <option value="">-- Choose Job Type --</option>
+          ${Object.keys(checklists)
+            .filter(key => key !== "Other Job")
+            .map(k => `<option value="${k}" ${saved.jobType === k ? 'selected' : ''}>${k}</option>`)
+            .join('')}
+        </select>
+      </label>
+    ` : ""}
     <label>Date/Time: <input id="jobDate" type="text" value="${saved.date || new Date().toLocaleString()}" readonly></label>
     <hr>
     <div id="checklist-items"></div>
@@ -112,14 +124,20 @@ function renderChecklist(jobName, containerId) {
   `;
 
   const checklistItems = document.getElementById('checklist-items');
+  const currentList = isOther && saved.jobType ? checklists[saved.jobType] : checklists[jobName];
 
-  checklists[jobName].forEach((item, i) => {
-    const checked = saved['check' + i] ? 'checked' : '';
+  currentList.forEach((item, i) => {
+    const savedCheck = saved['check' + i] || false;
+    const savedStatus = saved['status' + i] || 'Done';
     const div = document.createElement('div');
     div.className = 'check-item';
     div.innerHTML = `
-      <input type="checkbox" id="check${i}" ${checked}>
+      <input type="checkbox" id="check${i}" ${savedCheck ? 'checked' : ''}>
       <input type="text" class="editable-text" value="${item}">
+      <select class="status-select" id="status${i}">
+        <option value="Done" ${savedStatus === "Done" ? "selected" : ""}>Done</option>
+        <option value="Not Required" ${savedStatus === "Not Required" ? "selected" : ""}>Not Required</option>
+      </select>
       <button onclick="deleteCheckpoint(${i}, '${jobName}')">🗑</button>
     `;
     checklistItems.appendChild(div);
@@ -142,16 +160,24 @@ function deleteCheckpoint(index, jobName) {
 }
 
 function saveChecklist(jobName) {
+  const isOther = jobName === "Other Job";
   const data = {
     jobNum: document.getElementById('jobNum').value,
     date: document.getElementById('jobDate').value,
     doubleChecker: document.getElementById('doubleChecker').value,
     allOk: document.getElementById('allOk').checked
   };
-  document.querySelectorAll('.check-item').forEach((div, i) => {
+
+  if (isOther) data.jobType = document.getElementById('jobTypeSelect').value;
+
+  const items = document.querySelectorAll('.check-item');
+  items.forEach((div, i) => {
     data['check' + i] = div.querySelector('input[type=checkbox]').checked;
-    checklists[jobName][i] = div.querySelector('input.editable-text').value;
+    data['status' + i] = div.querySelector('.status-select').value;
+    const newText = div.querySelector('input.editable-text').value;
+    checklists[jobName][i] = newText;
   });
+
   data.confirm = document.getElementById('confirm').checked;
   localStorage.setItem('checklist_' + jobName, JSON.stringify(data));
   alert('Saved');
@@ -164,18 +190,42 @@ function clearChecklist(jobName) {
 }
 
 function completeChecklist(jobName) {
+  const isOther = jobName === "Other Job";
   const jobNum = document.getElementById('jobNum').value;
   const date = document.getElementById('jobDate').value;
   const doubleChecker = document.getElementById('doubleChecker').value;
   const allOk = document.getElementById('allOk').checked ? '✓' : '✗';
 
-  let body = `Job Type: ${jobName}\nJob Number: ${jobNum}\nDate/Time: ${date}\n\nCompleted Checks:\n`;
-  checklists[jobName].forEach(item => body += `✓ ${item}\n`);
+  if (isOther && !document.getElementById('jobTypeSelect').value) {
+    alert('Please select a job type for Other Job.');
+    return;
+  }
+
+  // Require all checkboxes to be ticked or marked Not Required
+  const allComplete = [...document.querySelectorAll('.check-item')].every(div => {
+    const checked = div.querySelector('input[type=checkbox]').checked;
+    const status = div.querySelector('.status-select').value;
+    return checked || status === 'Not Required';
+  });
+
+  if (!allComplete) {
+    alert('All items must be ticked or marked as Not Required before completing.');
+    return;
+  }
+
+  const selectedType = isOther ? document.getElementById('jobTypeSelect').value : jobName;
+  const currentList = checklists[selectedType];
+
+  let body = `Job Type: ${selectedType}\nJob Number: ${jobNum}\nDate/Time: ${date}\n\nCompleted Checks:\n`;
+  currentList.forEach((item, i) => {
+    const status = document.getElementById('status' + i)?.value || 'Done';
+    body += `${status === 'Done' ? '✓' : '–'} ${item} (${status})\n`;
+  });
   body += `\nFinal Confirmation: ✓ Vehicle safe and ready for release.\n`;
   body += `Double Checked By: ${doubleChecker} – ${allOk} All OK\n`;
 
   const mailBody = encodeURIComponent(body);
-  const mailSubject = encodeURIComponent(`Completed Safety Checklist – ${jobName}`);
+  const mailSubject = encodeURIComponent(`Completed Safety Checklist – ${selectedType}`);
   const mailTo = `mailto:soren@humphriesandparks.co.uk,Darrell@humphriesandparks.co.uk,michaelrose01795@icloud.com?subject=${mailSubject}&body=${mailBody}`;
   window.open(mailTo, '_blank');
 }
