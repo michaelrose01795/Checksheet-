@@ -95,7 +95,7 @@ function renderChecklist(jobName, containerId) {
     ${isOther ? `
       <label>Select Job Type: 
         <select id="jobTypeSelect">
-          <option value="">-- Choose Job Type --</option>
+          <option value="Other Job" ${saved.jobType === "" ? "selected" : ""}>Other Job</option>
           ${Object.keys(checklists)
             .filter(key => key !== "Other Job")
             .map(k => `<option value="${k}" ${saved.jobType === k ? 'selected' : ''}>${k}</option>`)
@@ -191,17 +191,20 @@ function clearChecklist(jobName) {
 
 function completeChecklist(jobName) {
   const isOther = jobName === "Other Job";
-  const jobNum = document.getElementById('jobNum').value;
+  const jobNum = document.getElementById('jobNum').value.trim();
   const date = document.getElementById('jobDate').value;
   const doubleChecker = document.getElementById('doubleChecker').value;
   const allOk = document.getElementById('allOk').checked ? '✓' : '✗';
 
-  if (isOther && !document.getElementById('jobTypeSelect').value) {
-    alert('Please select a job type for Other Job.');
+  if (isOther && document.getElementById('jobTypeSelect').value === "Other Job") {
+    alert('Please select a valid job type for Other Job.');
     return;
   }
 
-  // Require all checkboxes to be ticked or marked Not Required
+  const selectedType = isOther ? document.getElementById('jobTypeSelect').value : jobName;
+  const currentList = checklists[selectedType];
+
+  // Require all checkboxes to be ticked or "Not Required"
   const allComplete = [...document.querySelectorAll('.check-item')].every(div => {
     const checked = div.querySelector('input[type=checkbox]').checked;
     const status = div.querySelector('.status-select').value;
@@ -209,18 +212,19 @@ function completeChecklist(jobName) {
   });
 
   if (!allComplete) {
-    alert('All items must be ticked or marked as Not Required before completing.');
+    alert('All checkpoints must be ticked or marked as Not Required before completing.');
     return;
   }
 
-  const selectedType = isOther ? document.getElementById('jobTypeSelect').value : jobName;
-  const currentList = checklists[selectedType];
-
   let body = `Job Type: ${selectedType}\nJob Number: ${jobNum}\nDate/Time: ${date}\n\nCompleted Checks:\n`;
+
   currentList.forEach((item, i) => {
+    const check = document.getElementById('check' + i)?.checked;
     const status = document.getElementById('status' + i)?.value || 'Done';
-    body += `${status === 'Done' ? '✓' : '–'} ${item} (${status})\n`;
+    const mark = check ? '✓' : status === 'Not Required' ? '-' : '✗';
+    body += `${mark} ${item} (${status})\n`;
   });
+
   body += `\nFinal Confirmation: ✓ Vehicle safe and ready for release.\n`;
   body += `Double Checked By: ${doubleChecker} – ${allOk} All OK\n`;
 
